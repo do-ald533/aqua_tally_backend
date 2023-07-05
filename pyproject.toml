@@ -7,12 +7,16 @@ license = "MIT"
 readme = "README.md"
 packages = [{include = "aqua_tally_backend"}]
 
+[tool.poe.tasks.django]
+cmd = "python manage.py"
+
 [tool.poetry.dependencies]
 python = "^3.11"
 Django = "^4.2.3"
 
 [tool.poetry.group.dev.dependencies]
 mypy = "^1.4.1"
+poethepoet = "^0.20.0"
 
 [build-system]
 requires = ["poetry-core"]
