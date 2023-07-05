@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "aqua-tally-backend"
+version = "0.1.0"
+description = ""
+authors = ["do-ald533 <douglas.aldred533@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "aqua_tally_backend"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+Django = "^4.2.3"
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.4.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
