@@ -13,6 +13,7 @@ cmd = "python manage.py"
 [tool.poetry.dependencies]
 python = "^3.11"
 Django = "^4.2.3"
+djangorestframework = "^3.14.0"
 
 [tool.poetry.group.dev.dependencies]
 mypy = "^1.4.1"
