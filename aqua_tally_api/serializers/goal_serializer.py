@@ -6,4 +6,4 @@ from ..models import GoalModel
 class GoalSerializer(serializers.ModelSerializer):
     class Meta:
         model = GoalModel
-        fields = '__all__'
+        exclude = ["user", "goal"]
