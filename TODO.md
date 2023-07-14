@@ -2,4 +2,5 @@ tests
 logger
 swagger
 .env
-pagination
+
+criar validação de uuid

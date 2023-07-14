@@ -37,6 +37,7 @@ REST_FRAMEWORK = {
 
 INSTALLED_APPS = [
     "aqua_tally_api",
+    'drf_yasg',
     "rest_framework",
     "django.contrib.admin",
     "django.contrib.auth",

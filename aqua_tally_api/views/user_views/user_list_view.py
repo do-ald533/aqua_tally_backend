@@ -1,23 +1,41 @@
+import logging
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.views import APIView
 from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_201_CREATED
-from rest_framework.pagination import BasePagination
 
 from ...serializers import UserSerializer
 from ...models import UserModel
 
-class UserListView(APIView):
-    """
-    List all Users, or create a new User
-    """
+class UserListView(APIView, LimitOffsetPagination):
+    logger = logging.getLogger(__name__)
 
+    @swagger_auto_schema(
+        query_serializer=UserSerializer,
+        responses={200: UserSerializer(many=True)},
+        tags=['Users'],
+    )
     def get(self, request: Request) -> Response:
-        pagination = BasePagination()
         users = UserModel.objects.all()
-        serializer = UserSerializer(users, many=True)
-        return Response(serializer.data)
+        results = self.paginate_queryset(users, request, view=self)
+        serializer = UserSerializer(results, many=True)
+        return self.get_paginated_response(serializer.data)
 
+    @swagger_auto_schema(
+            request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'name': openapi.Schema(type=openapi.TYPE_STRING),
+                'weight': openapi.Schema(type=openapi.TYPE_INTEGER)
+            },
+        ),
+        security=[],
+        tags=['Users'],
+    )
     def post(self, request: Request) -> Response:
         serializer = UserSerializer(data=request.data)  # type: ignore
         if not serializer.is_valid():

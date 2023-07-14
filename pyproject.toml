@@ -14,6 +14,7 @@ cmd = "python manage.py"
 python = "^3.11"
 Django = "^4.2.3"
 djangorestframework = "^3.14.0"
+drf-yasg = "^1.21.6"
 
 [tool.poetry.group.dev.dependencies]
 mypy = "^1.4.1"
