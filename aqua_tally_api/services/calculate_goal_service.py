@@ -1,4 +1,4 @@
-from ..models import UserModel, GoalModel
+from ..models import UserModel
 
 def calculate_goal(user: UserModel):
-    return GoalModel.objects.create(user=user, goal=user.weight * 35)
+    return user.weight * 35

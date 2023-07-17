@@ -1,4 +1,5 @@
 from django.db import models
+from uuid import uuid4
 
 from .user_model import UserModel
 
@@ -6,8 +7,9 @@ class GoalModel(models.Model):
     class Meta:
         db_table = 'goal'
 
-    date = models.DateField(primary_key=True, auto_now_add=True)
+    id = models.UUIDField(name="id" , primary_key=True, default=uuid4)
+    date = models.DateField(db_index=True)
     goal_achieved = models.BooleanField(default=False)
     ml_consumed = models.IntegerField(default=0)
     goal = models.IntegerField(blank=False)
-    user = models.ForeignKey(UserModel, on_delete=models.CASCADE)
+    user = models.ForeignKey(UserModel, on_delete=models.CASCADE, db_index=True)

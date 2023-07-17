@@ -50,15 +50,15 @@ class UserDetailView(APIView):
     def patch(self, request: Request, user_id: str) -> Response:
         try:
             user = UserModel.objects.get(id=user_id)
+            serializer = UserSerializer(user, data=request.data, partial=True)  # type: ignore
+            if not serializer.is_valid():
+                return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+
+            serializer.save()
+            return Response(serializer.data)
         except UserModel.DoesNotExist:
             return Response({"error": "User not found"}, status=HTTP_404_NOT_FOUND)
 
-        serializer = UserSerializer(user, data=request.data, partial=True)  # type: ignore
-        if not serializer.is_valid():
-            return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
-
-        serializer.save()
-        return Response(serializer.data)
 
     @swagger_auto_schema(
         manual_parameters=[
@@ -71,8 +71,8 @@ class UserDetailView(APIView):
     def delete(self, request: Request, user_id: int) -> Response:
         try:
             user = UserModel.objects.get(id=user_id)
+            user.delete()
+            return Response(status=HTTP_204_NO_CONTENT)
         except UserModel.DoesNotExist:
             return Response({"error": "User not found"}, status=HTTP_404_NOT_FOUND)
 
-        user.delete()
-        return Response(status=HTTP_204_NO_CONTENT)
