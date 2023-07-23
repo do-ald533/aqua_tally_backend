@@ -9,7 +9,6 @@ class GoalModel(models.Model):
 
     id = models.UUIDField(name="id" , primary_key=True, default=uuid4)
     date = models.DateField(db_index=True)
-    goal_achieved = models.BooleanField(default=False)
+    goal_achieved: models.BooleanField = models.BooleanField(default=False)
     ml_consumed = models.IntegerField(default=0)
-    goal = models.IntegerField(blank=False)
     user = models.ForeignKey(UserModel, on_delete=models.CASCADE, db_index=True)

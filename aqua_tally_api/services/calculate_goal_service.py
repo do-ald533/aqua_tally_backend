@@ -1,4 +1,4 @@
 from ..models import UserModel
 
-def calculate_goal(user: UserModel):
-    return user.weight * 35
+def calculate_goal(weight: float):
+    return weight * 35

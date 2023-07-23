@@ -68,7 +68,7 @@ class UserDetailView(APIView):
             404: openapi.Response('User not found')
         }
     )
-    def delete(self, request: Request, user_id: int) -> Response:
+    def delete(self, request: Request, user_id: str) -> Response:
         try:
             user = UserModel.objects.get(id=user_id)
             user.delete()
