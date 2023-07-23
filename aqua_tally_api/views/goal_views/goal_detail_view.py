@@ -25,16 +25,16 @@ class GoalDetailView(APIView):
     def patch(self, request: Request, user_id: str, goal_id: str) -> Response:
         try:
             user = GoalModel.objects.get(id=goal_id, user_id=user_id)
+            serializer = GoalSerializer(user, data=request.data, partial=True) #type: ignore
+            if not serializer.is_valid():
+                return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+
+            serializer.save()
+            return Response(serializer.data)
         except GoalModel.DoesNotExist:
             self.logger.error(f'Goal with {goal_id} and user id {user_id} doesnt exist')
             return Response({"error": "User not found"}, status=HTTP_404_NOT_FOUND)
 
-        serializer = GoalSerializer(user, data=request.data, partial=True) #type: ignore
-        if not serializer.is_valid():
-            return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
-
-        serializer.save()
-        return Response(serializer.data)
     
     def delete(self, request: Request, user_id: int, goal_id: str) -> Response:
         try:

@@ -1,12 +1,13 @@
 import logging
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
-
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.views import APIView
 from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_201_CREATED
+
+from ...services import calculate_goal
 
 from ...serializers import UserSerializer
 from ...models import UserModel
@@ -36,10 +37,16 @@ class UserListView(APIView, LimitOffsetPagination):
         security=[],
         tags=['Users'],
     )
-    def post(self, request: Request) -> Response:
-        serializer = UserSerializer(data=request.data)  # type: ignore
-        if not serializer.is_valid():
-            return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+    def post(self, request: Request) -> Response | None:
+        try:
+            name = request.data.get('name') #type: ignore
+            weight = request.data.get('weight') #type: ignore
+            if not name or not weight:
+                return Response({"msg": "missing informations"}, status=HTTP_400_BAD_REQUEST)
 
-        serializer.save()
-        return Response(serializer.data, status=HTTP_201_CREATED)
+            goal = calculate_goal(float(weight))
+            user = UserModel.objects.create(name=name, weight=weight, goal=goal)
+            user_serializer = UserSerializer(instance=user)
+            return Response(user_serializer.data, status=HTTP_201_CREATED)
+        except Exception:
+            self.logger.error(f"Unexpected error occured {Exception}")

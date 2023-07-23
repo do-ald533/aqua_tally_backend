@@ -28,7 +28,7 @@ class GoalListView(APIView, LimitOffsetPagination):
 
             calculated_goal = calculate_goal(user)
             if request.data.get("date") and validate_date(request.data.get("date")):  # type: ignore
-                if GoalModel.objects.filter(date=request.data.get("date")).exists():  # type: ignore
+                if GoalModel.objects.filter(date=request.data.get("date"), user_id=user_id).exists():  # type: ignore
                     return Response(
                         {"msg": "there can only be one Goal with the specified date"},
                         status=status.HTTP_400_BAD_REQUEST,
