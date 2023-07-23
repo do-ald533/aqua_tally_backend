@@ -1,1 +1,2 @@
 from .calculate_goal_service import calculate_goal
+from .construct_goal_response import construct_goal_response

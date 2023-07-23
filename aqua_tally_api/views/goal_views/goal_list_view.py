@@ -1,6 +1,5 @@
 import logging
 
-import json
 from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework.views import APIView
@@ -26,7 +25,7 @@ class GoalListView(APIView, LimitOffsetPagination):
         try:
             user = UserModel.objects.get(id=user_id)
 
-            calculated_goal = calculate_goal(user)
+            calculated_goal = calculate_goal(user.weight)
             if request.data.get("date") and validate_date(request.data.get("date")):  # type: ignore
                 if GoalModel.objects.filter(date=request.data.get("date"), user_id=user_id).exists():  # type: ignore
                     return Response(
