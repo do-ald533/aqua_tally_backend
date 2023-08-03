@@ -11,4 +11,5 @@ class GoalModel(models.Model):
     date = models.DateField(db_index=True)
     goal_achieved: models.BooleanField = models.BooleanField(default=False)
     ml_consumed = models.IntegerField(default=0)
+    last_taken_at = models.DateTimeField(),
     user = models.ForeignKey(UserModel, on_delete=models.CASCADE, db_index=True)
