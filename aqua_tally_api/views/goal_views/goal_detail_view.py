@@ -31,12 +31,14 @@ class GoalDetailView(APIView):
         try:
             user = UserModel.objects.get(id=user_id)
             goal = GoalModel.objects.get(id=goal_id, user_id=user_id)
+            if goal_achieved_verifier(goal, user):
+                goal.goal_achieved = True
             serializer = GoalSerializer(goal, data=request.data, partial=True) #type: ignore
             if not serializer.is_valid():
                 return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
             serializer.save()
-            return Response(serializer.data)
+            return Response(construct_goal_response(goal, user))
         except GoalModel.DoesNotExist:
             self.logger.error(f'Goal with {goal_id} doesnt exist')
             return Response({"error": "Goal not found"}, status=HTTP_404_NOT_FOUND)

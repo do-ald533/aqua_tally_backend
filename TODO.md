@@ -12,3 +12,6 @@ criar validação de uuid
 - pode visualizar registro de um dia passado no endpoint
 - não pode ter endpoint no futuro
 - alguns dados no passado podem não existir na base
+
+
+- create consume water service
