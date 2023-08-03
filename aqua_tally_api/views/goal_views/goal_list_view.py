@@ -24,15 +24,13 @@ class GoalListView(APIView, LimitOffsetPagination):
     def post(self, request: Request, user_id: str) -> Response:
         try:
             user = UserModel.objects.get(id=user_id)
-
-            calculated_goal = calculate_goal(user.weight)
             if request.data.get("date") and validate_date(request.data.get("date")):  # type: ignore
                 if GoalModel.objects.filter(date=request.data.get("date"), user_id=user_id).exists():  # type: ignore
                     return Response(
                         {"msg": "there can only be one Goal with the specified date"},
                         status=status.HTTP_400_BAD_REQUEST,
                     )
-                goal = GoalModel.objects.create(user=user, goal=calculated_goal, date=request.data.get("date"))  # type: ignore
+                goal = GoalModel.objects.create(user=user, date=request.data.get("date"))  # type: ignore
                 goal_serializer = GoalSerializer(instance=goal)
                 return Response(goal_serializer.data, status=status.HTTP_201_CREATED)
 
